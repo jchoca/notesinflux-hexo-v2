@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>My First Post Using Hexo | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I started working as a software developer for a large company about a month ago.  Up until that point, I was working in a different profession, and programming was mostly just my hobby.  I’ve programm">
+<meta name="keywords" content="firstpost,hexo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="My First Post Using Hexo">
+<meta property="og:url" content="http://yoursite.com/2015/01/01/2015-01-01-First-Post/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="I started working as a software developer for a large company about a month ago.  Up until that point, I was working in a different profession, and programming was mostly just my hobby.  I’ve programm">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-09-29T21:21:17.297Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="My First Post Using Hexo">
+<meta name="twitter:description" content="I started working as a software developer for a large company about a month ago.  Up until that point, I was working in a different profession, and programming was mostly just my hobby.  I’ve programm">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2015-01-01-First-Post" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/01/2015-01-01-First-Post/" class="article-date">
+  <time datetime="2015-01-02T02:19:39.000Z" itemprop="datePublished">2015-01-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      My First Post Using Hexo
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I started working as a software developer for a large company about a month ago.  Up until that point, I was working in a different profession, and programming was mostly just my hobby.  I’ve programmed in a lot of different areas, both for work and for fun: PLC programming, HMI programming, MATLAB, and python.  My work programming has mostly been related to machine software, and my hobbyist programming has mostly been web development. Now I’m working with JavaScript, although it’s unclear how long that will be true.  I am not formally trained in computer science.</p>
+<p>I am starting this blog in part as an effort to chronicle my learning process as a software developer.  As an aspiring developer, I know there are many others who are not trained in computer science or computer engineering and want to break into the field.  Maybe I can help them somehow.</p>
+<p>I also just wanted to get writing.  I wanted an outlet where I can write about things that interest me.  What are my interests besides programming?  Technology, gadgets, science and engineering, music, health and nutrition, to name just a few.  Although this blog will mostly be about programming and tech, I’m not going to necessarily narrow the scope to just that.  Who knows?</p>
+<p>Since I’m going to be working with JavaScript a lot, I decided to use a JavaScript-based blogging framework called <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a>.  Hexo is powered by Node.js.  It’s simple and elegant, and it uses <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank" rel="noopener">Markdown</a> for blog posts.  Installation and setup was easy in Ubuntu:</p>
+<pre><code>$ npm install -g hexo
+$ hexo init my-blog
+$ cd my-blog
+$ npm install
+</code></pre><p>Now I have a blog located in the folder my-blog.  Then to create a new blog post, I just do</p>
+<pre><code>$ hexo new my-new-blog-post
+</code></pre><p>This generates a new markdown file with the title in the filename.  I’ve configured the filename format for new posts so that it also includes the date, like so:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">new_post_name:</span> <span class="string">:year-:month-:day-:title.md</span> <span class="comment"># File name of new posts</span></span><br></pre></td></tr></table></figure>
+<p>This is located in the site configuration file, _config.yml, along with a variety of other options, such as the site title, URL, language, and server options.  I really like the default theme that comes with hexo.  In any case, there are a variety of other themes available at <a href="https://github.com/hexojs/hexo/wiki/themes" target="_blank" rel="noopener">https://github.com/hexojs/hexo/wiki/themes</a>.  One thing I noticed is that the RSS feed doesn’t seem to work right out of the box.  To get it working, you just need to install the feed generator plugin, like so:</p>
+<pre><code>$ npm install hexo-generator-feed --save
+</code></pre><p>Then you can add it to your configuration file:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># RSS Feed</span></span><br><span class="line"><span class="attr">feed:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">atom</span></span><br><span class="line"><span class="attr">  path:</span> <span class="string">atom.xml</span></span><br><span class="line"><span class="attr">  limit:</span> <span class="number">20</span></span><br></pre></td></tr></table></figure>
+<p>That’s about it for now.  I will probably update this post as I learn more about hexo in the future.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/01/01/2015-01-01-First-Post/" data-id="cjmnzzki70000nqr7omrrc99w" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/firstpost/">firstpost</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/02/08/2015-02-08-An-Agile-Perspective/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          An Agile Perspective
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/agile/">agile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angularjs/">angularjs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/firstpost/">firstpost</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jasmine/">jasmine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scrum/">scrum</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/agile/" style="font-size: 10px;">agile</a> <a href="/tags/angularjs/" style="font-size: 10px;">angularjs</a> <a href="/tags/firstpost/" style="font-size: 10px;">firstpost</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/jasmine/" style="font-size: 10px;">jasmine</a> <a href="/tags/scrum/" style="font-size: 10px;">scrum</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/06/23/2015-06-23-Angular-Unit-Testing-with-Jasmine/">Angular 1.x Unit Testing with Jasmine</a>
+          </li>
+        
+          <li>
+            <a href="/2015/02/08/2015-02-08-An-Agile-Perspective/">An Agile Perspective</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/01/2015-01-01-First-Post/">My First Post Using Hexo</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

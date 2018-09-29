@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="default">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-2015-06-23-Angular-Unit-Testing-with-Jasmine" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/23/2015-06-23-Angular-Unit-Testing-with-Jasmine/" class="article-date">
+  <time datetime="2015-06-24T02:31:24.000Z" itemprop="datePublished">2015-06-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/23/2015-06-23-Angular-Unit-Testing-with-Jasmine/">Angular 1.x Unit Testing with Jasmine</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Testing in Angular seems to be a sticking point for a lot of developers and rightly so.  I haven’t been able to find a real solid reference or comprehensive guide for testing in Angular with Jasmine in conjunction with the <a href="https://github.com/johnpapa/angular-styleguide" target="_blank" rel="noopener">John Papa Angular Style Guide</a>, so I decided to start creating one.  This guide assumes no previous experience with unit testing, but it does assume familiarity/experience with Angular JS.</p>
+<h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><p>Wikipedia defines a unit test as follows:</p>
+<blockquote>
+<p>In computer programming, unit testing is a software testing method by which individual units of source code, sets of one or more computer program modules together with associated control data, usage procedures, and operating procedures, are tested to determine whether they are fit for use.</p>
+</blockquote>
+<p>We essentially test a block of code (e.g., a module, controller, service, etc.) in a vacuum.  We set the stage by mocking dependencies and simulating the conditions we’d like to test, then we make assertions about how our code should behave.  Let’s take a look at a simple example.  Here is a simple multiplication module:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// multiplication.js</span></span><br><span class="line"><span class="keyword">var</span> Multiplication = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">multiplyBy2</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> val*<span class="number">2</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">multiplyBy3</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> val*<span class="number">4</span>; <span class="comment">// typo here will cause this function to behave incorrectly</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    multiplyBy2: multiplyBy2,</span><br><span class="line">    multiplyBy3: multiplyBy3</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<p>and here is a corresponding Jasmine test file:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// multiplication.spec.js</span></span><br><span class="line">describe(<span class="string">"multiplication"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> testNum;</span><br><span class="line">  </span><br><span class="line">  beforeEach(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// put setup code here</span></span><br><span class="line">    testNum = <span class="number">3</span>;</span><br><span class="line">  &#125;)</span><br><span class="line">  </span><br><span class="line">  describe(<span class="string">'method multiplyBy2'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    it(<span class="string">'should multiply its argument by 2'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      expect(Multiplication.multiplyBy2(testNum)).toEqual(<span class="number">6</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  describe(<span class="string">'method multiplyBy3'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    it(<span class="string">'should multiply its argument by 3'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="comment">// fails due to typo above</span></span><br><span class="line">      expect(Multiplication.multiplyBy3(testNum)).toEqual(<span class="number">9</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><a href="http://plnkr.co/edit/FO47r4yXfzM5lWQGWoEG" target="_blank" rel="noopener">http://plnkr.co/edit/FO47r4yXfzM5lWQGWoEG</a>?</p>
+<p>Check out the plunk to see how it’s set up.  We have two different test cases, marked by the ‘it’ statement.  You can nest describe and it statements, and the descriptions will concatenate.  For example, the first test case would read “multiplication multiplyBy2 should multiply its argument by 2.”</p>
+<p>Testing in Angular is similar to the example above, except that we’ll need to use the <a href="ngMock">https://docs.angularjs.org/api/ngMock</a> module so that we can inject and mock angular services and modules.  When I write Angular code, I mostly follow the <a href="https://github.com/johnpapa/angular-styleguide" target="_blank" rel="noopener">John Papa Style Guide</a>, which says you should use controllerAs syntax (with bindToController, if needed).</p>
+<h2 id="Controllers"><a href="#Controllers" class="headerlink" title="Controllers"></a>Controllers</h2><p>Testing controllers is probably the most straight-forward in Angular.  We load the module that our controller is associated with, then we mock any dependencies our controller has, and finally we instantiate the controller.  I’ve created another plunk (here: <a href="http://plnkr.co/edit/RpPAl5oRaXFB96XNB4KD" target="_blank" rel="noopener">http://plnkr.co/edit/RpPAl5oRaXFB96XNB4KD</a>) that I’ll be using examples from.  Here’s the controller and test file:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// myCtrl.controller.js</span></span><br><span class="line"></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="meta">  'use strict'</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// Load Angular module and add controller</span></span><br><span class="line">  angular</span><br><span class="line">    .module(<span class="string">'myApp'</span>)</span><br><span class="line">    .controller(<span class="string">'MyCtrl'</span>, MyCtrl);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// Simple controller that uses myService</span></span><br><span class="line">  MyCtrl.$inject = [<span class="string">'myService'</span>];</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">MyCtrl</span>(<span class="params">myService</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> myCtrl = <span class="keyword">this</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Declare bindable members here</span></span><br><span class="line">    myCtrl.hello = <span class="string">"Hello World"</span>;</span><br><span class="line">    myCtrl.anotherHello = myService.hello();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<p>&nbsp;<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// myCtrl.controller.spec.js</span></span><br><span class="line"></span><br><span class="line">describe(<span class="string">"myCtrl"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> myCtrl, mockService;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// Load the module</span></span><br><span class="line">  beforeEach(<span class="built_in">module</span>(<span class="string">'myApp'</span>));</span><br><span class="line">  </span><br><span class="line">  beforeEach(inject(<span class="function"><span class="keyword">function</span> (<span class="params">$controller</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// Create a mocked version of myService</span></span><br><span class="line">    mockService = &#123;</span><br><span class="line">      <span class="comment">// Using a spy here to track calls to mockService.hello()</span></span><br><span class="line">      hello: jasmine.createSpy(<span class="string">'myService'</span>)</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// Instantiate the controller using $controller service,</span></span><br><span class="line">    <span class="comment">// stubbing in mockService for myService</span></span><br><span class="line">    myCtrl = $controller(<span class="string">'MyCtrl'</span>, &#123; <span class="attr">myService</span>: mockService &#125;);</span><br><span class="line">  &#125;));</span><br><span class="line">  </span><br><span class="line">  it(<span class="string">'should set the hello property'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    expect(myCtrl.hello).toEqual(<span class="string">'Hello World'</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">  it(<span class="string">'should call myService.hello'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    expect(mockService.hello).toHaveBeenCalled();</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h2 id="Services"><a href="#Services" class="headerlink" title="Services"></a>Services</h2><p>Services are similar to controllers, except there’s no helper function for instantiating them, which means we have to mock dependencies a little differently.  Here’s my simple example service with test file:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// myService.service.js</span></span><br><span class="line"></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="meta">  'use strict'</span>;</span><br><span class="line"></span><br><span class="line">  angular</span><br><span class="line">    .module(<span class="string">'myApp'</span>)</span><br><span class="line">    .service(<span class="string">'myService'</span>, myService);</span><br><span class="line">  </span><br><span class="line">  myService.$inject = [<span class="string">'myOtherService'</span>];</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">myService</span>(<span class="params">myOtherService</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">hello</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">"Hello"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      hello: hello</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<p>&nbsp;<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// myService.service.spec.js</span></span><br><span class="line"></span><br><span class="line">describe(<span class="string">'myService'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> myService, mockMyOtherService = &#123;&#125;;</span><br><span class="line">  </span><br><span class="line">  beforeEach(<span class="built_in">module</span>(<span class="string">'myApp'</span>));</span><br><span class="line">  </span><br><span class="line">  beforeEach(<span class="built_in">module</span>(<span class="function"><span class="keyword">function</span>(<span class="params">$provide</span>) </span>&#123;</span><br><span class="line">    $provide.value(<span class="string">'myOtherService'</span>, mockMyOtherService);</span><br><span class="line">  &#125;));</span><br><span class="line">  </span><br><span class="line">  beforeEach(inject(<span class="function"><span class="keyword">function</span>(<span class="params">_myService_</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// Use injector to get the service</span></span><br><span class="line">    myService = _myService_;</span><br><span class="line">  &#125;));</span><br><span class="line">  </span><br><span class="line">  describe(<span class="string">'hello'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    it(<span class="string">'should return hello'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      expect(myService.hello()).toEqual(<span class="string">"Hello"</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>Here we’re using $provide to “register” a provider in Angular world.  We tell it the name of the dependency we are providing (myOtherService in this case) along with the mocked service (in this case just an empty object).  It’s important to understand here that we’re just registering the provider so Angular knows about it.  We can even change it after the fact like this:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">describe(<span class="string">'myService'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> myService, mockMyOtherService = &#123;&#125;;</span><br><span class="line">  </span><br><span class="line">  beforeEach(<span class="built_in">module</span>(<span class="string">'myApp'</span>));</span><br><span class="line">  </span><br><span class="line">  beforeEach(<span class="built_in">module</span>(<span class="function"><span class="keyword">function</span>(<span class="params">$provide</span>) </span>&#123;</span><br><span class="line">    $provide.value(<span class="string">'myOtherService'</span>, mockMyOtherService);</span><br><span class="line">  &#125;));</span><br><span class="line">  </span><br><span class="line">  beforeEach(inject(<span class="function"><span class="keyword">function</span>(<span class="params">_myService_</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// Use injector to get the service</span></span><br><span class="line">    myService = _myService_;</span><br><span class="line">  &#125;));</span><br><span class="line">  </span><br><span class="line">  describe(<span class="string">'hello'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    it(<span class="string">'should return hello and call myOtherService.someMethod'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      mockMyOtherService.someMethod = jasmine.createSpy(<span class="string">'someMethod'</span>);</span><br><span class="line">      expect(myService.hello()).toEqual(<span class="string">"Hello"</span>);</span><br><span class="line">      expect(mockMyOtherService.someMethod).toHaveBeenCalled();</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="Directives"><a href="#Directives" class="headerlink" title="Directives"></a>Directives</h2><p>Directives are a little trickier.  Since directives are essentially reusable components with custom behavior, they inherently mix presentation (template) with display logic (controller or linking function).  Things get interesting when you’re using controllerAs syntax, where the controller is a property of the directive/element scope.  Here’s my directive, using both a post-link function and controller (<a href="http://plnkr.co/edit/IeVdEwmNWcfF8wnnx9i2)" target="_blank" rel="noopener">http://plnkr.co/edit/IeVdEwmNWcfF8wnnx9i2)</a>:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// myDirective.directive.js</span></span><br><span class="line"></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="meta">  'use strict'</span>;</span><br><span class="line">  </span><br><span class="line">  angular</span><br><span class="line">    .module(<span class="string">'myApp'</span>)</span><br><span class="line">    .directive(<span class="string">'myDirective'</span>, myDirective);</span><br><span class="line">    </span><br><span class="line">  myDirective.$inject = [<span class="string">'myService'</span>];</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">myDirective</span>(<span class="params">myService</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> directive = &#123;</span><br><span class="line">      restrict: <span class="string">'E'</span>,</span><br><span class="line">      template: <span class="string">'&lt;div&gt;Hello&lt;/div&gt;'</span>,</span><br><span class="line">      controller: MyDirectiveCtrl,</span><br><span class="line">      controllerAs: <span class="string">'myDirectiveCtrl'</span>,</span><br><span class="line">      scope: &#123;&#125;,</span><br><span class="line">      bindToController: <span class="literal">true</span>,</span><br><span class="line">      link: linkFn</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> directive;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">linkFn</span>(<span class="params">scope</span>) </span>&#123;</span><br><span class="line">      scope.myDirectiveCtrl.goodbye = myService.goodbye(); <span class="comment">// Goodbye</span></span><br><span class="line">      <span class="built_in">console</span>.log(scope.myDirectiveCtrl.hello); <span class="comment">// Hello</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  MyDirectiveCtrl.$inject = [<span class="string">'myService'</span>];</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">MyDirectiveCtrl</span>(<span class="params">myService</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> myDirectiveCtrl = <span class="keyword">this</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// bindables go here</span></span><br><span class="line">    myDirectiveCtrl.hello = <span class="literal">null</span>;</span><br><span class="line">    </span><br><span class="line">    activate();</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">activate</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      myDirectiveCtrl.hello = myService.hello(); <span class="comment">// Hello</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<p>The controller is accessible in the linking function as a scope property as shown above.  Likewise, $scope could be accessible in the controller by injecting it.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// myDirective.directive.spec.js</span></span><br><span class="line"></span><br><span class="line">describe(<span class="string">"myDirective"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> myDirectiveCtrl, mockService = &#123;&#125;, $compile, $rootScope, element;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// Load the module</span></span><br><span class="line">  beforeEach(<span class="built_in">module</span>(<span class="string">'myApp'</span>));</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// Register providers</span></span><br><span class="line">  beforeEach(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">module</span>(<span class="string">'myApp'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">$provide</span>) </span>&#123;</span><br><span class="line">      $provide.value(<span class="string">'myService'</span>, mockService);</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// Add content to providers (mock the dependencies)</span></span><br><span class="line">  beforeEach(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    mockService = &#123;</span><br><span class="line">      hello: jasmine.createSpy(<span class="string">'myServiceHello'</span>).and.returnValue(<span class="string">"Hello"</span>),</span><br><span class="line">      goodbye: jasmine.createSpy(<span class="string">'myServiceGoodbye'</span>).and.returnValue(<span class="string">"Goodbye"</span>)</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// instantiate the directive</span></span><br><span class="line">  beforeEach(inject(<span class="function"><span class="keyword">function</span> (<span class="params">_$compile_, _$rootScope_</span>) </span>&#123;</span><br><span class="line">    $compile = _$compile_;</span><br><span class="line">    $rootScope = _$rootScope_;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// wrap the directive in an angular element, then compile it</span></span><br><span class="line">    element = angular.element(<span class="string">'&lt;my-directive&gt;&lt;/my-directive&gt;'</span>);</span><br><span class="line">    $compile(element)($rootScope);</span><br><span class="line">    $rootScope.$digest();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// retrieve the controller for the directive</span></span><br><span class="line">    <span class="comment">// see "Extras" section here https://docs.angularjs.org/api/ng/function/angular.element</span></span><br><span class="line">    myDirectiveCtrl = element.controller(<span class="string">'myDirective'</span>);</span><br><span class="line">  &#125;));</span><br><span class="line">  </span><br><span class="line">  it(<span class="string">'consist of a div'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    expect(element.html()).toEqual(<span class="string">'&lt;div&gt;Hello&lt;/div&gt;'</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">  describe(<span class="string">'link function'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    it(<span class="string">'should call my service goodbye'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      expect(mockService.goodbye).toHaveBeenCalled();</span><br><span class="line">    &#125;)</span><br><span class="line">    </span><br><span class="line">    it(<span class="string">'should set the goodbye property'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      expect(myDirectiveCtrl.goodbye).toEqual(<span class="string">"Goodbye"</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">  describe(<span class="string">'myDirectiveCtrl'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    it(<span class="string">'should invoke myService.hello'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      expect(mockService.hello).toHaveBeenCalled();</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    it(<span class="string">'should set the hello property'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      expect(myDirectiveCtrl.hello).toEqual(<span class="string">"Hello"</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/06/23/2015-06-23-Angular-Unit-Testing-with-Jasmine/" data-id="cjmnzzkip000anqr78n7col7i" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/angularjs/">angularjs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jasmine/">jasmine</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2015-02-08-An-Agile-Perspective" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/02/08/2015-02-08-An-Agile-Perspective/" class="article-date">
+  <time datetime="2015-02-08T23:32:48.000Z" itemprop="datePublished">2015-02-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/08/2015-02-08-An-Agile-Perspective/">An Agile Perspective</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Last year, Dave Thomas (a.k.a, Pragmatic Dave) posted a blog entry titled <a href="http://pragdave.me/blog/2014/03/04/time-to-kill-agile/" target="_blank" rel="noopener">“Agile is Dead (Long Live Agility)”</a> in which he argues that Agile has become a buzzword – a marketing term. The opportunistic swooped in and monetized the simple concepts suggested in the <a href="http://agilemanifesto.org/" target="_blank" rel="noopener">Manifesto for Agile Development</a>.  His post is a great read and the video below is a great watch.</p>
+<figure><br>    <iframe width="560" height="315" src="https://www.youtube.com/embed/YpGGRAhes2k" frameborder="0" allowfullscreen></iframe><br></figure>
+
+<p>The take-away is this: there is no cookie-cutter solution.  If you rely on “experts” to provide you with the perfect methodology for developing software then you’re probably going to miss the mark.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/02/08/2015-02-08-An-Agile-Perspective/" data-id="cjmnzzkic0001nqr7a669t975" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agile/">agile</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scrum/">scrum</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2015-01-01-First-Post" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/01/2015-01-01-First-Post/" class="article-date">
+  <time datetime="2015-01-02T02:19:39.000Z" itemprop="datePublished">2015-01-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/01/2015-01-01-First-Post/">My First Post Using Hexo</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I started working as a software developer for a large company about a month ago.  Up until that point, I was working in a different profession, and programming was mostly just my hobby.  I’ve programmed in a lot of different areas, both for work and for fun: PLC programming, HMI programming, MATLAB, and python.  My work programming has mostly been related to machine software, and my hobbyist programming has mostly been web development. Now I’m working with JavaScript, although it’s unclear how long that will be true.  I am not formally trained in computer science.</p>
+<p>I am starting this blog in part as an effort to chronicle my learning process as a software developer.  As an aspiring developer, I know there are many others who are not trained in computer science or computer engineering and want to break into the field.  Maybe I can help them somehow.</p>
+<p>I also just wanted to get writing.  I wanted an outlet where I can write about things that interest me.  What are my interests besides programming?  Technology, gadgets, science and engineering, music, health and nutrition, to name just a few.  Although this blog will mostly be about programming and tech, I’m not going to necessarily narrow the scope to just that.  Who knows?</p>
+<p>Since I’m going to be working with JavaScript a lot, I decided to use a JavaScript-based blogging framework called <a href="http://hexo.io" target="_blank" rel="noopener">Hexo</a>.  Hexo is powered by Node.js.  It’s simple and elegant, and it uses <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank" rel="noopener">Markdown</a> for blog posts.  Installation and setup was easy in Ubuntu:</p>
+<pre><code>$ npm install -g hexo
+$ hexo init my-blog
+$ cd my-blog
+$ npm install
+</code></pre><p>Now I have a blog located in the folder my-blog.  Then to create a new blog post, I just do</p>
+<pre><code>$ hexo new my-new-blog-post
+</code></pre><p>This generates a new markdown file with the title in the filename.  I’ve configured the filename format for new posts so that it also includes the date, like so:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">new_post_name:</span> <span class="string">:year-:month-:day-:title.md</span> <span class="comment"># File name of new posts</span></span><br></pre></td></tr></table></figure>
+<p>This is located in the site configuration file, _config.yml, along with a variety of other options, such as the site title, URL, language, and server options.  I really like the default theme that comes with hexo.  In any case, there are a variety of other themes available at <a href="https://github.com/hexojs/hexo/wiki/themes" target="_blank" rel="noopener">https://github.com/hexojs/hexo/wiki/themes</a>.  One thing I noticed is that the RSS feed doesn’t seem to work right out of the box.  To get it working, you just need to install the feed generator plugin, like so:</p>
+<pre><code>$ npm install hexo-generator-feed --save
+</code></pre><p>Then you can add it to your configuration file:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># RSS Feed</span></span><br><span class="line"><span class="attr">feed:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">atom</span></span><br><span class="line"><span class="attr">  path:</span> <span class="string">atom.xml</span></span><br><span class="line"><span class="attr">  limit:</span> <span class="number">20</span></span><br></pre></td></tr></table></figure>
+<p>That’s about it for now.  I will probably update this post as I learn more about hexo in the future.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/01/01/2015-01-01-First-Post/" data-id="cjmnzzki70000nqr7omrrc99w" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/firstpost/">firstpost</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/agile/">agile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/angularjs/">angularjs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/firstpost/">firstpost</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jasmine/">jasmine</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scrum/">scrum</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/agile/" style="font-size: 10px;">agile</a> <a href="/tags/angularjs/" style="font-size: 10px;">angularjs</a> <a href="/tags/firstpost/" style="font-size: 10px;">firstpost</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/jasmine/" style="font-size: 10px;">jasmine</a> <a href="/tags/scrum/" style="font-size: 10px;">scrum</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/06/23/2015-06-23-Angular-Unit-Testing-with-Jasmine/">Angular 1.x Unit Testing with Jasmine</a>
+          </li>
+        
+          <li>
+            <a href="/2015/02/08/2015-02-08-An-Agile-Perspective/">An Agile Perspective</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/01/2015-01-01-First-Post/">My First Post Using Hexo</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
